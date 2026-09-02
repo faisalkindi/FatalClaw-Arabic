@@ -52,7 +52,7 @@
 **Install (installer)**
 1. Close the game.
 2. Download `FatalClaw_Arabic_Installer.zip` above and unzip it.
-3. Run `Fatal Claw Arabic Installer.exe`; it finds the Steam install automatically (or pick the folder), then click the red install button.
+3. Run `Fatal Claw Arabic Installer.exe`; it finds the Steam install automatically (or pick the folder), then click the blue install button.
 4. In game: Options → Language → «العربية».
 
 **Manual install**: unzip `FatalClaw_Arabic_Manual.zip` and copy `FatalClawArabic_P.pak` into `...\steamapps\common\Fatal Claw\FatalClaw\Content\Paks\` (next to `FatalClaw-WindowsNoEditor.pak`).
