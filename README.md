@@ -1,5 +1,7 @@
 <p align="center"><a href="https://ko-fi.com/kindiboy"><img src="https://img.shields.io/badge/Ko--fi-%D8%A3%D8%B9%D8%AC%D8%A8%D9%83%20%D8%A7%D9%84%D8%AA%D8%B9%D8%B1%D9%8A%D8%A8%D8%9F%20%D8%A7%D8%AF%D8%B9%D9%85%D9%86%D9%8A%20%D8%B9%D9%84%D9%89%20Ko--fi-ff5f5f?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi"></a></p>
 
+<p align="center"><img src="release_media/01_header_1400x400.jpg" alt="Fatal Claw — التعريب الكامل" width="100%"></p>
+
 <h1 align="center">Fatal Claw — التعريب الكامل</h1>
 <p align="center">Complete Arabic localization for <b>Fatal Claw</b> (Steam) · تعريب كامل للعبة</p>
 
@@ -56,6 +58,10 @@
 **Manual install**: unzip `FatalClaw_Arabic_Manual.zip` and copy `FatalClawArabic_P.pak` into `...\steamapps\common\Fatal Claw\FatalClaw\Content\Paks\` (next to `FatalClaw-WindowsNoEditor.pak`).
 
 **Uninstall**: installer → uninstall button, or delete `FatalClawArabic_P.pak` from the Paks folder.
+
+## Screenshots
+
+![Installer](release_media/05_installer_1920x1080.jpg)
 
 ## Notes
 

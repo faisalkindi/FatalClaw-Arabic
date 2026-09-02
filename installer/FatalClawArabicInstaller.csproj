@@ -22,6 +22,9 @@
     <EmbeddedResource Include="payload.zip">
       <LogicalName>payload.zip</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="ui\ui_bg.jpg">
+      <LogicalName>ui_bg.jpg</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="ui\ui_logo.png">
       <LogicalName>ui_logo.png</LogicalName>
     </EmbeddedResource>

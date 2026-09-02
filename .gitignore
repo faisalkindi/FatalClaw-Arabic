@@ -37,3 +37,6 @@ installer/payload.zip
 # local
 __pycache__/
 *.log
+
+# raw media sources
+release_media_src/

@@ -1,10 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -21,11 +21,23 @@ namespace FatalClawArabic
         const string PakFile = "FatalClawArabic_P.pak";
 
         [STAThread]
-        static void Main()
+        static int Main(string[] args)
         {
+            // headless mode for testing: --detect | --install <root> | --uninstall <root>
+            if (args.Length > 0)
+            {
+                try
+                {
+                    if (args[0] == "--detect") { Console.WriteLine(DetectGamePath() ?? "(not found)"); return 0; }
+                    if (args[0] == "--install") { Install(args[1], Console.WriteLine); return 0; }
+                    if (args[0] == "--uninstall") { Uninstall(args[1], Console.WriteLine); return 0; }
+                }
+                catch (Exception ex) { Console.Error.WriteLine(ex.Message); return 1; }
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new MainForm());
+            return 0;
         }
 
         // ---- Steam game-folder detection -------------------------------------
@@ -37,13 +49,10 @@ namespace FatalClawArabic
                 string steam = GetSteamPath();
                 if (steam == null) return null;
                 string vdf = Path.Combine(steam, "steamapps", "libraryfolders.vdf");
-                var libs = new System.Collections.Generic.List<string>();
-                libs.Add(steam);
+                var libs = new System.Collections.Generic.List<string> { steam };
                 if (File.Exists(vdf))
-                {
                     foreach (Match m in Regex.Matches(File.ReadAllText(vdf), "\"path\"\\s*\"([^\"]+)\""))
                         libs.Add(m.Groups[1].Value.Replace("\\\\", "\\"));
-                }
                 foreach (string lib in libs)
                 {
                     string acf = Path.Combine(lib, "steamapps", "appmanifest_" + AppId + ".acf");
@@ -60,18 +69,8 @@ namespace FatalClawArabic
 
         static string GetSteamPath()
         {
-            try
-            {
-                object p = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", null);
-                if (p is string s1 && Directory.Exists(s1)) return s1.Replace('/', '\\');
-            }
-            catch { }
-            try
-            {
-                object p = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam", "InstallPath", null);
-                if (p is string s2 && Directory.Exists(s2)) return s2;
-            }
-            catch { }
+            try { if (Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", null) is string s1 && Directory.Exists(s1)) return s1.Replace('/', '\\'); } catch { }
+            try { if (Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam", "InstallPath", null) is string s2 && Directory.Exists(s2)) return s2; } catch { }
             return null;
         }
 
@@ -84,11 +83,8 @@ namespace FatalClawArabic
         public static string ExePath(string gameRoot) => Path.Combine(InnerRoot(gameRoot), "Binaries", "Win64", "FatalClaw-Win64-Shipping.exe");
         public static string ModPak(string gameRoot) => Path.Combine(PaksDir(gameRoot), PakFile);
 
-        public static bool IsValidGameFolder(string folder)
-        {
-            if (string.IsNullOrEmpty(folder)) return false;
-            return File.Exists(BasePak(folder));
-        }
+        public static bool IsValidGameFolder(string folder) =>
+            !string.IsNullOrEmpty(folder) && File.Exists(BasePak(folder));
 
         public static bool IsInstalled(string gameRoot) => File.Exists(ModPak(gameRoot));
 
@@ -103,24 +99,20 @@ namespace FatalClawArabic
 
             EnsureGameClosed(gameRoot);
 
-            string work = Path.Combine(Path.GetTempPath(), "FatalClawArabicInstall_tmp");
-            SafeDeleteDir(work);
-            Directory.CreateDirectory(work);
-            try
+            progress("جارٍ تثبيت النصوص والخطّ العربي…");
+            var asm = Assembly.GetExecutingAssembly();
+            using (Stream s = asm.GetManifestResourceStream("payload.zip"))
             {
-                progress("جارٍ تحضير ملفات التعريب…");
-                ExtractPayload(work);
-
-                progress("جارٍ تثبيت النصوص والخطّ العربي…");
-                Directory.CreateDirectory(PaksDir(gameRoot));
-                File.Copy(Path.Combine(work, PakFile), ModPak(gameRoot), true);
-
-                progress("تم التثبيت بنجاح ✔");
+                if (s == null) throw new Exception("ملفات التعريب المضمّنة غير موجودة داخل المثبّت.");
+                using (var z = new ZipArchive(s, ZipArchiveMode.Read))
+                {
+                    var entry = z.GetEntry(PakFile);
+                    if (entry == null) throw new Exception("ملف مفقود داخل المثبّت: " + PakFile);
+                    Directory.CreateDirectory(PaksDir(gameRoot));
+                    entry.ExtractToFile(ModPak(gameRoot), true);
+                }
             }
-            finally
-            {
-                SafeDeleteDir(work);
-            }
+            progress("تم التثبيت بنجاح ✔");
         }
 
         public static void Uninstall(string gameRoot, Action<string> progress)
@@ -132,57 +124,29 @@ namespace FatalClawArabic
             progress("تمت الإزالة ✔");
         }
 
-        // ---- internals --------------------------------------------------------
-
-        static void ExtractPayload(string destDir)
-        {
-            var asm = Assembly.GetExecutingAssembly();
-            using (Stream s = asm.GetManifestResourceStream("payload.zip"))
-            {
-                if (s == null) throw new Exception("ملفات التعريب المضمّنة غير موجودة داخل المثبّت.");
-                using (var z = new ZipArchive(s, ZipArchiveMode.Read))
-                    z.ExtractToDirectory(destDir, true);
-            }
-        }
-
-        static void SafeDeleteDir(string dir)
-        {
-            try { if (Directory.Exists(dir)) Directory.Delete(dir, true); } catch { }
-        }
-
         static void EnsureGameClosed(string gameRoot)
         {
             string exe = ExePath(gameRoot);
             if (!File.Exists(exe)) return;
-            try
-            {
-                using (var fs = new FileStream(exe, FileMode.Open, FileAccess.Read, FileShare.Read))
-                { }
-            }
-            catch (IOException)
-            {
-                throw new Exception("اللعبة قيد التشغيل. الرجاء إغلاق اللعبة تمامًا ثم إعادة المحاولة.");
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new Exception("تعذّر الوصول إلى ملفات اللعبة. شغّل المثبّت كمسؤول (Run as administrator).");
-            }
+            try { using (new FileStream(exe, FileMode.Open, FileAccess.Read, FileShare.Read)) { } }
+            catch (IOException) { throw new Exception("اللعبة قيد التشغيل. الرجاء إغلاق اللعبة تمامًا ثم إعادة المحاولة."); }
+            catch (UnauthorizedAccessException) { throw new Exception("تعذّر الوصول إلى ملفات اللعبة. شغّل المثبّت كمسؤول (Run as administrator)."); }
         }
     }
 
-    // ===================== UI (same visual language as the other Kindiboy installers) =====================
+    // ===================== modern UI (same visual language as the other Kindiboy installers) =====================
 
     static class Ui
     {
-        public static readonly Color Bg = Color.FromArgb(30, 26, 23);
-        public static readonly Color Card = Color.FromArgb(44, 38, 33);
-        public static readonly Color Gold = Color.FromArgb(206, 167, 92);
-        public static readonly Color GoldHover = Color.FromArgb(224, 187, 112);
-        public static readonly Color Red = Color.FromArgb(168, 70, 58);
-        public static readonly Color RedHover = Color.FromArgb(192, 86, 72);
-        public static readonly Color Ink = Color.FromArgb(34, 28, 23);
-        public static readonly Color Text = Color.FromArgb(236, 228, 214);
-        public static readonly Color Muted = Color.FromArgb(150, 140, 128);
+        public static readonly Color Bg = Color.FromArgb(12, 16, 22);
+        public static readonly Color Card = Color.FromArgb(24, 32, 42);
+        public static readonly Color Cyan = Color.FromArgb(96, 205, 255);   // logo neon blue
+        public static readonly Color CyanHover = Color.FromArgb(140, 222, 255);
+        public static readonly Color Red = Color.FromArgb(190, 54, 44);
+        public static readonly Color RedHover = Color.FromArgb(214, 76, 62);
+        public static readonly Color Ink = Color.FromArgb(8, 14, 22);
+        public static readonly Color Text = Color.FromArgb(226, 232, 238);
+        public static readonly Color Muted = Color.FromArgb(128, 142, 156);
 
         static PrivateFontCollection _pfc;
         public static FontFamily Family;
@@ -210,6 +174,17 @@ namespace FatalClawArabic
         public static Font F(float size, FontStyle style = FontStyle.Regular)
             => new Font(Family, size, style, GraphicsUnit.Point);
 
+        public static Image LoadBackground()
+        {
+            try
+            {
+                using (Stream st = Assembly.GetExecutingAssembly().GetManifestResourceStream("ui_bg.jpg"))
+                using (var img = Image.FromStream(st))
+                    return new Bitmap(img);
+            }
+            catch { return null; }
+        }
+
         public static Image LoadLogo()
         {
             try
@@ -236,10 +211,11 @@ namespace FatalClawArabic
 
     public class RoundButton : Button
     {
-        public Color Base = Ui.Gold;
-        public Color Hover = Ui.GoldHover;
+        public Color Base = Ui.Cyan;
+        public Color Hover = Ui.CyanHover;
         public Color Fg = Ui.Ink;
         public int Radius = 14;
+        public Color Outline = Color.Empty;
         bool _hover;
 
         public RoundButton()
@@ -262,13 +238,16 @@ namespace FatalClawArabic
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             var rect = new Rectangle(0, 0, Width - 1, Height - 1);
-            Color fill = !Enabled ? Color.FromArgb(70, 64, 58) : (_hover ? Hover : Base);
+            Color fill = !Enabled ? Color.FromArgb(44, 54, 64) : (_hover ? Hover : Base);
             using (var path = Ui.Round(rect, Radius))
             using (var b = new SolidBrush(fill))
+            {
                 g.FillPath(b, path);
+                if (Outline != Color.Empty) using (var pen = new Pen(Outline, 1f)) g.DrawPath(pen, path);
+            }
             var sf = new StringFormat(StringFormatFlags.DirectionRightToLeft)
             { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-            using (var tb = new SolidBrush(Enabled ? Fg : Color.FromArgb(140, 130, 120)))
+            using (var tb = new SolidBrush(Enabled ? Fg : Color.FromArgb(120, 132, 144)))
                 g.DrawString(Text, Font, tb, rect, sf);
         }
     }
@@ -285,28 +264,25 @@ namespace FatalClawArabic
         {
             Ui.LoadFont();
 
-            Text = "Fatal Claw Arabic Installer v" + Program.Version;
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(96F, 96F);
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(520, 716);
+            ClientSize = new Size(560, 780);
             BackColor = Ui.Bg;
+            BackgroundImage = Ui.LoadBackground();
+            BackgroundImageLayout = ImageLayout.Stretch;
             RightToLeft = RightToLeft.Yes;
             RightToLeftLayout = true;
             Font = Ui.F(11f);
-            Region = new Region(Ui.Round(new Rectangle(0, 0, Width, Height), 18));
-
+            Text = "Fatal Claw Arabic Installer v" + Program.Version;
             MouseDown += DragStart;
 
             var close = new Label
             {
-                Text = "✕",
-                Font = new Font("Segoe UI", 12f, FontStyle.Bold),
-                ForeColor = Ui.Muted,
-                AutoSize = false,
-                Size = new Size(34, 30),
-                Location = new Point(12, 12),
-                TextAlign = ContentAlignment.MiddleCenter,
-                Cursor = Cursors.Hand
+                Text = "✕", Font = new Font("Segoe UI", 12f, FontStyle.Bold), ForeColor = Ui.Muted,
+                AutoSize = false, Size = new Size(34, 30), Location = new Point(14, 14),
+                TextAlign = ContentAlignment.MiddleCenter, Cursor = Cursors.Hand, BackColor = Color.Transparent
             };
             close.Click += (s, e) => Close();
             close.MouseEnter += (s, e) => { close.ForeColor = Ui.Red; };
@@ -315,128 +291,94 @@ namespace FatalClawArabic
 
             var ver = new Label
             {
-                Text = "v" + Program.Version,
-                Font = new Font("Segoe UI", 9f, FontStyle.Regular),
-                ForeColor = Ui.Muted,
-                AutoSize = false,
-                Size = new Size(80, 30),
-                Location = new Point(ClientSize.Width - 92, 12),
-                TextAlign = ContentAlignment.MiddleRight,
-                RightToLeft = RightToLeft.No
+                Text = "v" + Program.Version, Font = new Font("Segoe UI", 9f), ForeColor = Ui.Muted,
+                AutoSize = false, Size = new Size(80, 30), Location = new Point(ClientSize.Width - 92, 14),
+                TextAlign = ContentAlignment.MiddleRight, RightToLeft = RightToLeft.No, BackColor = Color.Transparent
             };
             ver.MouseDown += DragStart;
             Controls.Add(ver);
 
             var logo = new PictureBox
             {
-                Image = Ui.LoadLogo(),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Transparent,
-                Size = new Size(420, 216),
-                Location = new Point((ClientSize.Width - 420) / 2, 46)
+                Image = Ui.LoadLogo(), SizeMode = PictureBoxSizeMode.Zoom, BackColor = Color.Transparent,
+                Size = new Size(440, 160), Location = new Point((ClientSize.Width - 440) / 2, 62)
             };
             logo.MouseDown += DragStart;
             Controls.Add(logo);
 
             var subtitle = new Label
             {
-                Text = "التعريب العربي الكامل",
-                Font = Ui.F(15f, FontStyle.Bold),
-                ForeColor = Ui.Gold,
-                AutoSize = false,
-                UseCompatibleTextRendering = true,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Size = new Size(ClientSize.Width, 34),
-                Location = new Point(0, 270)
+                Text = "التعريب الكامل", Font = Ui.F(18f, FontStyle.Bold), ForeColor = Ui.Cyan,
+                AutoSize = false, UseCompatibleTextRendering = true, TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(ClientSize.Width, 58), Location = new Point(0, 236), BackColor = Color.Transparent
             };
-            subtitle.MouseDown += DragStart;
-            Controls.Add(subtitle);
+            subtitle.MouseDown += DragStart; Controls.Add(subtitle);
+
+            var tagline = new Label
+            {
+                Text = "ترجمة كاملة لكل نصوص اللعبة عن الأصل الكوري",
+                Font = Ui.F(9f), ForeColor = Ui.Muted,
+                AutoSize = false, UseCompatibleTextRendering = true, TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(ClientSize.Width, 30), Location = new Point(0, 294), BackColor = Color.Transparent
+            };
+            tagline.MouseDown += DragStart; Controls.Add(tagline);
 
             var card = new RoundPanel
             {
-                Size = new Size(440, 78),
-                Location = new Point((ClientSize.Width - 440) / 2, 322),
-                Fill = Ui.Card
+                Size = new Size(480, 86), Location = new Point((ClientSize.Width - 480) / 2, 334),
+                Fill = Color.FromArgb(205, Ui.Card), Border = Color.FromArgb(60, Ui.Cyan)
             };
             lblPath = new Label
             {
-                AutoSize = false,
-                Dock = DockStyle.Fill,
-                Padding = new Padding(14, 8, 14, 8),
-                ForeColor = Ui.Text,
-                Font = Ui.F(9.5f),
-                UseCompatibleTextRendering = true,
-                TextAlign = ContentAlignment.MiddleCenter,
-                BackColor = Color.Transparent
+                AutoSize = false, Dock = DockStyle.Fill, Padding = new Padding(6, 4, 6, 4), ForeColor = Ui.Text,
+                Font = Ui.F(8.5f), UseCompatibleTextRendering = true, TextAlign = ContentAlignment.MiddleCenter, BackColor = Color.Transparent
             };
-            card.Controls.Add(lblPath);
-            Controls.Add(card);
+            card.Controls.Add(lblPath); Controls.Add(card);
 
             btnInstall = new RoundButton
             {
-                Text = "تثبيت اللغة العربية",
-                Font = Ui.F(14f, FontStyle.Bold),
-                Size = new Size(440, 62),
-                Location = new Point((ClientSize.Width - 440) / 2, 420),
-                Base = Ui.Gold,
-                Hover = Ui.GoldHover,
-                Fg = Ui.Ink
+                Text = "تثبيت اللغة العربية", Font = Ui.F(15f, FontStyle.Bold), Size = new Size(480, 64),
+                Location = new Point((ClientSize.Width - 480) / 2, 440), Base = Ui.Cyan, Hover = Ui.CyanHover, Fg = Ui.Ink, Radius = 14
             };
-            btnInstall.Click += OnInstall;
-            Controls.Add(btnInstall);
+            btnInstall.Click += OnInstall; Controls.Add(btnInstall);
 
             btnUninstall = new RoundButton
             {
-                Text = "إزالة اللغة العربية",
-                Font = Ui.F(12.5f, FontStyle.Bold),
-                Size = new Size(440, 50),
-                Location = new Point((ClientSize.Width - 440) / 2, 494),
-                Base = Ui.Red,
-                Hover = Ui.RedHover,
-                Fg = Ui.Text
+                Text = "إزالة اللغة العربية", Font = Ui.F(12f, FontStyle.Bold), Size = new Size(480, 52),
+                Location = new Point((ClientSize.Width - 480) / 2, 514), Base = Color.FromArgb(26, 36, 48), Hover = Color.FromArgb(38, 52, 68),
+                Fg = Ui.Cyan, Outline = Color.FromArgb(150, Ui.Cyan), Radius = 14
             };
-            btnUninstall.Click += OnUninstall;
-            Controls.Add(btnUninstall);
+            btnUninstall.Click += OnUninstall; Controls.Add(btnUninstall);
 
             lblStatus = new Label
             {
-                AutoSize = false,
-                Font = Ui.F(10f),
-                UseCompatibleTextRendering = true,
-                TextAlign = ContentAlignment.MiddleCenter,
-                ForeColor = Ui.Muted,
-                Size = new Size(ClientSize.Width, 30),
-                Location = new Point(0, 602)
+                AutoSize = false, Font = Ui.F(10f), UseCompatibleTextRendering = true, TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Ui.Muted, Size = new Size(ClientSize.Width, 32), Location = new Point(0, 578), BackColor = Color.Transparent
             };
-            lblStatus.MouseDown += DragStart;
-            Controls.Add(lblStatus);
+            lblStatus.MouseDown += DragStart; Controls.Add(lblStatus);
 
             btnBrowse = new LinkLabel
             {
-                Text = "تحديد مجلد اللعبة يدويًا",
-                AutoSize = false,
-                Font = Ui.F(9f),
-                LinkColor = Ui.Muted,
-                ActiveLinkColor = Ui.Gold,
-                LinkBehavior = LinkBehavior.HoverUnderline,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Size = new Size(ClientSize.Width, 24),
-                Location = new Point(0, 642),
-                BackColor = Color.Transparent
+                Text = "تحديد مجلد اللعبة يدويًا", AutoSize = false, Font = Ui.F(9f), LinkColor = Ui.Muted,
+                ActiveLinkColor = Ui.Cyan, LinkBehavior = LinkBehavior.HoverUnderline, TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(ClientSize.Width, 28), Location = new Point(0, 610), BackColor = Color.Transparent
             };
-            btnBrowse.Click += OnBrowse;
-            Controls.Add(btnBrowse);
+            btnBrowse.Click += OnBrowse; Controls.Add(btnBrowse);
+
+            var kofi = new RoundButton
+            {
+                Text = "أعجبك التعريب؟ ادعمني على Ko-fi", Font = Ui.F(10.5f, FontStyle.Bold), Size = new Size(440, 46),
+                Location = new Point((ClientSize.Width - 440) / 2, 676), Base = Color.FromArgb(22, 30, 40), Hover = Color.FromArgb(34, 46, 60),
+                Fg = Ui.Text, Outline = Color.FromArgb(120, Ui.Cyan), Radius = 14
+            };
+            kofi.Click += (s, e) => { try { Process.Start(new ProcessStartInfo("https://ko-fi.com/kindiboy") { UseShellExecute = true }); } catch { } };
+            Controls.Add(kofi);
 
             var footer = new Label
             {
-                Text = "تعريب وإعداد:  Kindiboy",
-                Font = Ui.F(9.5f, FontStyle.Bold),
-                ForeColor = Color.FromArgb(170, 140, 92),
-                AutoSize = false,
-                UseCompatibleTextRendering = true,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Size = new Size(ClientSize.Width, 22),
-                Location = new Point(0, 682)
+                Text = "تعريب وإعداد:  Kindiboy", Font = Ui.F(9.5f, FontStyle.Bold), ForeColor = Ui.Cyan,
+                AutoSize = false, UseCompatibleTextRendering = true, TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(ClientSize.Width, 28), Location = new Point(0, 736), BackColor = Color.Transparent
             };
             footer.MouseDown += DragStart;
             Controls.Add(footer);
@@ -445,17 +387,26 @@ namespace FatalClawArabic
             RefreshState();
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            // recompute after DPI auto-scaling so the rounded corners follow the real size
+            Region = new Region(Ui.Round(new Rectangle(0, 0, Width, Height), (int)(20 * DeviceDpi / 96f)));
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            using (var pen = new Pen(Color.FromArgb(60, Ui.Gold), 1))
-            using (var path = Ui.Round(new Rectangle(0, 0, Width - 1, Height - 1), 18))
+            // subtle cyan border
+            using (var pen = new Pen(Color.FromArgb(70, Ui.Cyan), 1))
+            using (var path = Ui.Round(new Rectangle(0, 0, Width - 1, Height - 1), (int)(20 * DeviceDpi / 96f)))
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 e.Graphics.DrawPath(pen, path);
             }
         }
 
+        // ---- drag-to-move (borderless) ----
         [DllImport("user32.dll")] static extern bool ReleaseCapture();
         [DllImport("user32.dll")] static extern IntPtr SendMessage(IntPtr h, int msg, int wp, int lp);
         void DragStart(object sender, MouseEventArgs e)
@@ -476,7 +427,7 @@ namespace FatalClawArabic
                 lblPath.Text = "تم العثور على اللعبة" + Environment.NewLine + Trim(gamePath);
                 btnInstall.Enabled = !busy;
                 btnUninstall.Enabled = !busy && installed;
-                if (installed) SetStatus("✔ اللغة العربية مُثبّتة حاليًا", Ui.Gold);
+                if (installed) SetStatus("✔ اللغة العربية مُثبّتة حاليًا", Ui.Cyan);
                 else SetStatus("اللغة العربية غير مُثبّتة", Ui.Muted);
             }
             else
@@ -493,8 +444,8 @@ namespace FatalClawArabic
 
         static string Trim(string p)
         {
-            if (p != null && p.Length > 52) return "…" + p.Substring(p.Length - 50);
-            return p;
+            if (p != null && p.Length > 30) p = "…" + p.Substring(p.Length - 28);
+            return p == null ? null : "\u202A" + p + "\u202C";
         }
 
         void SetStatus(string text, Color color)
@@ -505,8 +456,8 @@ namespace FatalClawArabic
 
         void Progress(string text)
         {
-            if (InvokeRequired) BeginInvoke(new Action(() => SetStatus(text, Color.FromArgb(120, 170, 220))));
-            else SetStatus(text, Color.FromArgb(120, 170, 220));
+            if (InvokeRequired) BeginInvoke(new Action(() => SetStatus(text, Ui.Cyan)));
+            else SetStatus(text, Ui.Cyan);
         }
 
         void SetBusy(bool b)
@@ -521,7 +472,7 @@ namespace FatalClawArabic
             if (busy) return;
             using (var dlg = new FolderBrowserDialog())
             {
-                dlg.Description = "اختر مجلد اللعبة (المجلد الذي يحتوي على FatalClaw.exe)";
+                dlg.Description = "اختر مجلد اللعبة (المجلد الذي يحتوي على FatalClaw)";
                 dlg.UseDescriptionForTitle = true;
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -549,7 +500,8 @@ namespace FatalClawArabic
         {
             if (busy) return;
             if (MessageBox.Show(this,
-                    "سيتم نسخ ملف تعريب مستقل إلى مجلد اللعبة (لا يتم تعديل أي ملف أصلي).\n\nالمتابعة؟",
+                    "سيتم نسخ ملف تعريب مستقل إلى مجلد اللعبة (لا يتم تعديل أي ملف أصلي).\n" +
+                    "تأكد من إغلاق اللعبة.\n\nالمتابعة؟",
                     "تثبيت", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
                 return;
 
@@ -594,7 +546,7 @@ namespace FatalClawArabic
                     BeginInvoke(new Action(() =>
                     {
                         SetBusy(false);
-                        MessageBox.Show(this, "تمت إزالة اللغة العربية بنجاح.",
+                        MessageBox.Show(this, "تمت إزالة اللغة العربية. ستعود اللعبة إلى لغاتها الأصلية.",
                             "تمت الإزالة", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }));
                 }
@@ -615,6 +567,7 @@ namespace FatalClawArabic
     public class RoundPanel : Panel
     {
         public Color Fill = Ui.Card;
+        public Color Border = Color.Empty;
         public int Radius = 12;
         public RoundPanel()
         {
@@ -629,7 +582,10 @@ namespace FatalClawArabic
             var r = new Rectangle(0, 0, Width - 1, Height - 1);
             using (var path = Ui.Round(r, Radius))
             using (var b = new SolidBrush(Fill))
+            {
                 g.FillPath(b, path);
+                if (Border != Color.Empty) using (var pen = new Pen(Border, 1f)) g.DrawPath(pen, path);
+            }
         }
     }
 }
