@@ -1,0 +1,3 @@
+Full Arabic localization of Fatal Claw — all 3,559 lines translated directly from the original Korean script (dialogue, cinematics, journal, items, skills, menus), a hand-curated glossary, a dedicated Arabic font added alongside the game's own, Arabic as a real 11th language in the menu, and a one-click installer.
+
+‫تعريب كامل لـ Fatal Claw — ترجمة 3,559 سطرًا مباشرة عن النصّ الكوريّ الأصلي (الحوارات والمشاهد والمذكّرات والأصناف والمهارات والقوائم)، بمسرد موحّد، وخطّ عربيّ مخصّص مُضاف إلى خطوط اللعبة، والعربية لغة حادية عشرة حقيقية في قائمة اللغات، ومثبّت بنقرة واحدة.‬
