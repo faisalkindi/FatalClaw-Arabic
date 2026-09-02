@@ -61,6 +61,11 @@
 
 ## Screenshots
 
+| | |
+|---|---|
+| ![Title](release_media/02_title_1920x1080.jpg) | ![Engraving](release_media/03_engraving_1920x1080.jpg) |
+| ![Inventory](release_media/04_inventory_1920x1080.jpg) | ![Archive](release_media/06_archive_1920x1080.jpg) |
+
 ![Installer](release_media/05_installer_1920x1080.jpg)
 
 ## Notes
