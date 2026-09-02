@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>Fatal Claw Arabic Installer</AssemblyName>
+    <Version>1.0.0</Version>
+    <Product>Fatal Claw Arabic Localization</Product>
+    <Authors>Kindiboy</Authors>
+    <Company>Kindiboy</Company>
+    <Copyright>© Kindiboy</Copyright>
+    <AssemblyTitle>تعريب Fatal Claw — by Kindiboy</AssemblyTitle>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="payload.zip">
+      <LogicalName>payload.zip</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\ui_logo.png">
+      <LogicalName>ui_logo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ui\ui_font.ttf">
+      <LogicalName>ui_font.ttf</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

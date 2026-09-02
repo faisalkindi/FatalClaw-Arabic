@@ -1,0 +1,122 @@
+[center][size=6][b]المخلب القاتل — التعريب العربي الكامل[/b][/size]
+[size=5][b]Fatal Claw — Arabic Localization[/b][/size]
+[size=3]Modern Standard Arabic (MSA) • by Kindiboy[/size][/center]
+
+[line]
+
+[size=5][b]▐ Overview — نبذة[/b][/size]
+
+A complete [b]Modern Standard Arabic[/b] localization for [b]Fatal Claw[/b]. All 3,559 lines in the game — every dialogue, cinematic, journal entry, item, skill, region name, and menu — are translated directly from the [b]original Korean script[/b] (not relayed through English), and rendered in properly shaped, right-to-left Arabic with a dedicated Arabic font.
+
+Arabic is added to the game as a genuine [b]11th language[/b]: it appears alongside the existing ten in the in-game language menu, and none of the other languages are touched or replaced.
+
+تعريبٌ كاملٌ باللغة [b]العربية الفصحى الحديثة[/b] للعبة [b]Fatal Claw[/b]. جميع نصوص اللعبة — 3,559 سطرًا — من حواراتٍ ومشاهد سينمائية ومذكّرات وأصنافٍ ومهاراتٍ وأسماء مناطق وقوائم، مترجمةٌ مباشرةً عن [b]النصّ الكوريّ الأصليّ[/b] (وليست نقلًا عن الإنجليزية)، وتُعرَض بحروفٍ عربيةٍ متّصلةٍ سليمة من اليمين إلى اليسار بخطٍّ عربيٍّ مخصّص.
+
+أُضيفت العربية إلى اللعبة بوصفها [b]لغةً حادية عشرة[/b] حقيقية: تظهر في قائمة اللغات إلى جانب اللغات العشر الأصلية، دون استبدال أيٍّ منها أو المساس بها.
+
+[line]
+
+[size=5][b]▐ Features — المزايا[/b][/size]
+[list]
+[*][b]Full MSA translation[/b] of the entire game — 3,559 lines, 100% coverage
+[*][b]Translated from the original Korean[/b] script for fidelity to the writers' intent, tone and character voices
+[*][b]A real 11th language[/b] — selectable as «العربية» in Options → Language; all 10 original languages remain intact
+[*][b]Proper right-to-left (RTL)[/b] text flow and correct Arabic letter shaping across the interface
+[*][b]Dedicated Arabic font[/b] added alongside the game's own fonts (no font is replaced)
+[*][b]Consistent terminology[/b] — a curated glossary for all character, faction, place and item names, applied uniformly across the whole game
+[*][b]Safe, non-destructive[/b] — a single add-on file; no original game file is modified
+[/list]
+
+[list]
+[*][b]تعريب كامل[/b] لجميع نصوص اللعبة — 3,559 سطرًا بتغطية 100%
+[*][b]مترجم عن النصّ الكوريّ الأصلي[/b] حفاظًا على روح القصة ونبرة الشخصيات
+[*][b]لغة حادية عشرة حقيقية[/b] — تُختار كـ «العربية» من الإعدادات ← اللغة، مع بقاء اللغات العشر الأصلية كما هي
+[*][b]اتجاه صحيح من اليمين إلى اليسار[/b] ووصلٌ سليم للحروف في كامل الواجهة
+[*][b]خطّ عربيّ مخصّص[/b] مُضاف إلى خطوط اللعبة (لا يُستبدل أيّ خطّ أصلي)
+[*][b]مصطلحات موحّدة[/b] — مسرد مُراجَع لأسماء الشخصيات والفصائل والأماكن والأصناف، مطبَّق باتّساق عبر اللعبة كلها
+[*][b]آمن وغير مدمّر[/b] — ملفّ إضافيّ واحد؛ لا يُعدَّل أيّ ملفّ من ملفات اللعبة الأصلية
+[/list]
+
+[line]
+
+[size=5][b]▐ Requirements — المتطلبات[/b][/size]
+[list]
+[*][b]Fatal Claw[/b] (Steam, Windows) — version 1.0 or later
+[/list]
+The installer is fully self-contained — no .NET runtime or extra tools needed.
+
+المُثبِّت مستقلّ بالكامل — لا حاجة لأيّ أدوات أو حِزم إضافية.
+
+[line]
+
+[size=5][b]▐ Installation — التثبيت[/b][/size]
+
+[b]Option A — Installer (recommended):[/b]
+[list=1]
+[*]Download [b]Fatal Claw Arabic Installer.exe[/b] from the Files tab.
+[*]Close the game completely, then run the installer. It auto-detects your Steam copy (or lets you pick the folder manually).
+[*]Click [b]تثبيت اللغة العربية[/b] (Install). It copies one add-on file — done in a second.
+[*]Launch the game → [b]Options → Language → العربية[/b].
+[/list]
+[b]To uninstall:[/b] run the installer again and click [b]إزالة اللغة العربية[/b] (Uninstall). It removes only the file it added.
+
+[b]Option B — Manual:[/b]
+[list=1]
+[*]Download [b]FatalClaw_Arabic_v1.0_Manual.zip[/b] and extract [b]FatalClawArabic_P.pak[/b].
+[*]Copy it into [b]…\Steam\steamapps\common\Fatal Claw\FatalClaw\Content\Paks\[/b] (next to [i]FatalClaw-WindowsNoEditor.pak[/i]).
+[*]Launch the game → [b]Options → Language → العربية[/b].
+[/list]
+[b]To uninstall:[/b] delete [b]FatalClawArabic_P.pak[/b] from the Paks folder.
+
+[b]الطريقة الأولى — المُثبِّت (موصى بها):[/b]
+[list=1]
+[*]حمِّل [b]Fatal Claw Arabic Installer.exe[/b] من قسم الملفات.
+[*]أغلق اللعبة تمامًا ثم شغِّل المُثبِّت. سيكتشف موقع اللعبة تلقائيًّا (أو حدِّد المجلد يدويًّا).
+[*]اضغط [b]تثبيت اللغة العربية[/b]. يُنسَخ ملفٌّ إضافيٌّ واحد — ينتهي خلال ثانية.
+[*]شغِّل اللعبة ← [b]الإعدادات ← اللغة ← العربية[/b].
+[/list]
+[b]للإزالة:[/b] شغِّل المُثبِّت مرّة أخرى واضغط [b]إزالة اللغة العربية[/b]؛ يُحذَف الملف الذي أضافه فقط.
+
+[b]الطريقة الثانية — يدويًّا:[/b]
+[list=1]
+[*]حمِّل [b]FatalClaw_Arabic_v1.0_Manual.zip[/b] واستخرج [b]FatalClawArabic_P.pak[/b].
+[*]انسخه إلى [b]…\Steam\steamapps\common\Fatal Claw\FatalClaw\Content\Paks\[/b] (بجانب [i]FatalClaw-WindowsNoEditor.pak[/i]).
+[*]شغِّل اللعبة ← [b]الإعدادات ← اللغة ← العربية[/b].
+[/list]
+[b]للإزالة:[/b] احذف [b]FatalClawArabic_P.pak[/b] من مجلد Paks.
+
+[line]
+
+[size=5][b]▐ Notes — ملاحظات[/b][/size]
+[list]
+[*]Steam's [b]"Verify integrity of game files"[/b] does not remove this mod (it is an extra file, not a replaced one). If a future game update changes text or menus, an updated pak will be posted here.
+[*]The voice acting is untouched — audio follows the game's own settings.
+[*]If you spot a typo, an awkward line or a mistranslation, post it in the Bugs/Posts tab with a screenshot — every report is read and folded into the next version.
+[/list]
+
+[list]
+[*]التحقّق من سلامة ملفات اللعبة عبر Steam لا يُزيل هذا التعريب (فهو ملفّ إضافيّ لا استبدالٌ لملفّ أصلي). إن غيّر تحديثٌ مستقبليّ للعبة نصوصها أو قوائمها، سيُنشر هنا ملفّ محدَّث.
+[*]الأداء الصوتي يبقى كما هو ويتبع إعدادات اللعبة.
+[*]إن لاحظت خطأً إملائيًّا أو جملةً ركيكة أو ترجمةً غير دقيقة، فأبلغ عنها في قسم الأخطاء أو التعليقات مع صورة — كلّ ملاحظة تُقرأ وتُدمج في الإصدار التالي.
+[/list]
+
+[line]
+
+[size=5][b]▐ Support — دعم العمل[/b][/size]
+
+This localization is free and always will be. If it made the game more enjoyable for you and you'd like to support more Arabic localizations like it:
+[url=https://ko-fi.com/kindiboy][b]☕ ko-fi.com/kindiboy[/b][/url]
+
+هذا التعريب مجّانيّ وسيبقى كذلك. إن أضاف إلى متعتك باللعبة وأحببت دعم المزيد من التعريبات المماثلة:
+[url=https://ko-fi.com/kindiboy][b]☕ ko-fi.com/kindiboy[/b][/url]
+
+[line]
+
+[size=5][b]▐ Credits — شكر وتقدير[/b][/size]
+[list]
+[*]Localization, glossary, font integration, installer & packaging — [b]Kindiboy[/b]
+[*]Tools: [url=https://github.com/trumank/repak]repak[/url], [url=https://github.com/atenfyr/UAssetAPI]UAssetAPI / UAssetGUI[/url], [url=https://github.com/akintos/UnrealLocres]UnrealLocres[/url], [url=https://github.com/FabianFG/CUE4Parse]CUE4Parse[/url]
+[*]Font: SST Arabic
+[/list]
+
+[center][size=3]Not affiliated with or endorsed by NDEV GAMES or Com2uS Holdings. Fatal Claw is their property. This is a free, fan-made localization.[/size][/center]

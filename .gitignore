@@ -1,0 +1,39 @@
+# game files and anything derived directly from them
+localization_workspace/extracted/*.locres
+localization_workspace/extracted/*.uasset
+localization_workspace/extracted/*.uexp
+localization_workspace/widget_check/
+localization_workspace/font_work/
+localization_workspace/font_deploy/
+localization_workspace/font_add/
+localization_workspace/icu_work/
+localization_workspace/culture_test/
+localization_workspace/rtl_test/
+localization_workspace/scripts/_tools/
+localization_workspace/scripts/FatalClaw/
+localization_workspace/*dump*
+localization_workspace/work_dump.txt
+localization_workspace/01_extracted_strings.jsonl
+localization_workspace/10_full_qa_input.csv
+
+# intermediate pipeline chunks (regenerable from scripts + final CSV)
+localization_workspace/batches/
+localization_workspace/release/rt_verify.csv
+
+# release binaries ship via GitHub Releases / Nexus
+localization_workspace/release/*.exe
+localization_workspace/release/*.zip
+localization_workspace/release/*.pak
+localization_workspace/release/manual/
+localization_workspace/release/staging/
+
+# installer build outputs
+installer/bin/
+installer/obj/
+installer/publish/
+installer/payload/
+installer/payload.zip
+
+# local
+__pycache__/
+*.log

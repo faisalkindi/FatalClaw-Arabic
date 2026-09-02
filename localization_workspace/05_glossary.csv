@@ -1,0 +1,45 @@
+source_term,reading,type,should_translate,arabic,status,notes
+Kisha,키샤,character_name,transliterate,كيشا,resolved_pilot,protagonist cat; masculine confirmed [SRC store copy]
+Fatal Claw,페이탈 클로,title/weapon,translate,المخلب القاتل,resolved_pilot,"Used in CommonInterface credits/ending strings, reads well in context (""المخلب القاتل""). Distinct from the in-game Golden/Silver Claw artifacts."
+Golden Claw,금빛 클로,item/weapon,translate,المخلب الذهبي,resolved_pilot,Kisha's primary weapon-artifact; Cain repeatedly asks for/about it
+Silver Claw,은빛 클로,item/weapon,translate,المخلب الفضّي,resolved_pilot,companion artifact to the Golden Claw per Item/DESC_GOLDEN_CLAW
+Elord Kingdom,엘로드 왕국,place,translate_descriptor,مملكة إلورد,resolved_pilot,왕국=kingdom translates; Elord transliterated
+Kannir,카니르,concept,transliterate,الكانير,resolved_pilot,energy source; liquid/raw form
+Kannic,카닉,concept,transliterate,الكانيك,resolved_pilot,solid/condensed Kannir; also currency — DISTINCT term from Kannir; do not conflate
+Origin Laboratory,오리진 연구소,place,translate_descriptor,مختبر أوريجن,resolved_pilot,연구소=laboratory translates; used in Item/DESC_INGREDIENT_COFFEE as أوريجن
+Stone of Records,기록의 돌,item/concept,translate,حجر السجلّات,resolved_pilot,archives Ancients; appears very frequently
+Stone of Intelligence,지성의 돌,item,translate,حجر الذكاء,resolved_pilot,new — surfaced in Cain drilling-site lines
+Ancients,고대인,concept,translate,القدماء,pending,not yet appeared verbatim in pilot; provisional
+Commoners,범인/평민,concept,translate,العامّة,pending,not yet appeared verbatim in pilot; provisional
+Yellow Cats,황묘족,faction,translate,القطط الصفراء,resolved_pilot,former ruling dynasty; Cain's own faction
+Black Cats,흑묘족,faction,translate,القطط السوداء,resolved_pilot,Kisha's faction per Cain; very frequent
+the Sorr,소르,faction,transliterate,السور,pending,wolf-warrior people; not yet appeared verbatim in pilot
+Sorron,소르온,character_name,transliterate,سورون,resolved_pilot,Sorr leader / antagonist; extremely frequent in Cain's lines; honorific 님 -> المولى (see style guide)
+Enma,엔마,character_name,transliterate,إنما,resolved_pilot,"""Golden Spirit Wolf""; Sorron's lieutenant; appears in Cain's lines"
+Higasha Tundra,히가샤 동토,place,translate_descriptor,تندرا هيقاشا,resolved_pilot,동토=tundra translates; hard-G rule applied (هيقاشا not هيغاشا)
+Aphotic Marsh,무광의 늪,place,translate,المستنقع المظلم,pending,provisional; not yet appeared verbatim in pilot
+Silver Chain,은빛 سلسلة,item,translate,السلسلة الفضّية,pending,not yet appeared verbatim in pilot
+King's Authority,왕의 권능,concept,translate,سلطان الملك,pending,not yet appeared verbatim in pilot
+Jayma,제이마,character_name,transliterate,جايما,resolved_pilot,"CORRECTED reading: corpus spells this 제이마 (Jeima) not 자이마 as earlier lore-post EN suggested. Owl-tribe leader, sacred wings skill. ""Jayma's Dungeon"" -> سجن جايما (provisional, dungeon itself not yet appeared verbatim)"
+Examu,엑사무,character_name,transliterate,إكسامو,resolved_pilot,"CORRECTED reading: opening-cinematic corpus spells this 엑사무 (Eksamu), not 에그자무 as earlier lore-post EN suggested — deified first king, addressed via honorific 님 as ""Lord/the Divine Examu"" (المولى إكسامو)"
+King Odz,오즈 왕,character_name,transliterate,الملك أودز,resolved_pilot,sealed the surface passage; appears in Skill/DESC_SKILL_BEADS_ODDS
+Imprint School,임프리트 학파,faction,translate,مدرسة النقش,resolved_pilot,CORRECTED: Korean itself uses the loanword 임프리트 (imprint) + 학파 (school) — translated 학파 as مدرسة and rendered the concept as "the school of Engraving" to match Engraved Skills below rather than transliterating "imprint"
+Engraved Skills,각인 스킬,concept,translate,مهارات النقش,resolved_pilot,core ability system; very frequent in Skill/* rows
+Strigine Quarry,스트리진 채석장,place,translate_descriptor,محجر ستريجين,pending,채석장=quarry translates; owl-artisan lore; not yet appeared verbatim in pilot
+Black Canyon,검은 협곡,place,translate,الوادي الأسود,pending,not yet appeared verbatim in pilot
+Stone of Immortality,불멸의 돌,item/place,translate,حجر الخلود,resolved_pilot,appears in Item/DESC_DORMANT_IMMORTAL_STONE and Item/DESC_DIMENSIONAL_LOOP
+Cabitz,카비츠,item,transliterate,كابيتز,pending,ability-customization magic stone; not yet appeared verbatim in pilot
+Carox,캐록스,item,transliterate,كيلوكس,resolved_pilot,"CORRECTED: corpus item Item/DESC_CAROCS uses 캐록스 (Kaerokseu); the Item/DESC_DRONE_ND615 in-body reference reads 캐록스 too, rendered كيلوكس for readability — VERIFY against more occurrences before freezing, only one row seen so far"
+Kurtz,커츠,character_name/creature,transliterate,كورتز,resolved_pilot,"threat Cain fears; ""White Spirit Kurtz""/백령의 커츠 = الروح البيضاء كورتز"
+Vanrion's Gate,반리온의 문,place/item,translate_descriptor,بوابة ڤانريون,resolved_pilot,new — teleport-network gate item family; V-sound rendered ڤ per house rule
+Aisare,아이사르,character_name,transliterate,آيساري,resolved_pilot,new — ancient owl craftsman who made the Stone of Records shards
+Nagaraja,나가라자,character_name,transliterate,ناجاراجا,resolved_pilot,new — self-sacrificing deity/legend tied to Imprint School and Black Canyon
+Mirkam,미르캄,character_name,transliterate,ميركام,resolved_pilot,new — source of the Dash skill's leg-strength power
+Snaga,스나가,character_name,transliterate,سناقا,resolved_pilot,new — "lord of might"; hard-G rule applied
+Lyani,랴니,character_name,transliterate,لياني,resolved_pilot,new — ice-wall traversal technique origin
+Irbes,이르베스,character_name,transliterate,إيربس,resolved_pilot,new — wall-climbing claw technique origin
+Poppo,포뽀,creature,transliterate,البوبو,resolved_pilot,new — recurring nuisance creature that follows/interferes with Cain
+Adrian,아드리안,character_name,transliterate,أدريان,resolved_pilot,new — "Adrian's Marble/orb" health-recovery item origin; devoted himself to the kingdom's sacrificed
+Aurora Village,서광의 마을,place,translate,قرية الفجر,resolved_pilot,new — main hub village; 서광=dawn/first light rendered الفجر
+Automata,오토마타,concept,transliterate,أوتوماتا,resolved_pilot,new — standard loanword convention; appears constantly across Skill/Item/NPC rows
+Deity/Avatar (epithet),화신,concept,translate,المتجسّد,resolved_pilot,"new — epithet for a being whose Kannir-energy power Kisha inherits (Skill/DESC_PASSIVE_DASH_ATTACK); provisional rendering, revisit once more context on this figure appears"
