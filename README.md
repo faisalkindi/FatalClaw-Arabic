@@ -1,4 +1,5 @@
 <p align="center"><a href="https://ko-fi.com/kindiboy"><img src="https://img.shields.io/badge/Ko--fi-Support%20me%20on%20Ko--fi-ff5f5f?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi"></a></p>
+<p align="center">الموقع / Website: <a href="https://enmaworld.com/translations/fatal-claw/">enmaworld.com</a></p>
 
 <p align="center"><img src="release_media/01_header_1400x400.jpg" alt="Fatal Claw — التعريب الكامل" width="100%"></p>
 
